@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*! purgecss start ignore */
+html {
+  scroll-behavior: smooth;
+}
+
+svg {
+  @apply align-baseline;
+}
+
+img {
+  @apply inline-block;
+  image-rendering: -webkit-optimize-contrast !important;
+}
+
+textarea {
+  @apply resize-none;
+}
+
+body {
+  @apply bg-white !important;
+
+  font-family: "游ゴシック", "游ゴシック体", YuGothic, "Yu Gothic", "メイリオ",
+    Meiryo, "ＭＳ ゴシック", "MS Gothic", HiraKakuProN-W3, "TakaoExゴシック",
+    TakaoExGothic, "MotoyaLCedar", "Droid Sans Japanese", sans-serif;
+  font-weight: 500;
+}
+
+.ant-card-bordered .ant-card-cover {
+  margin: 0 !important;
+}
+
+/* .ant-divider-horizontal {
+  margin: 10px 0 !important;
+} */
+
+.ant-form-item-label
+  > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
+  display: inline-block;
+  margin-left: 5px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  content: "必須";
+  background-color: #ff4d4f;
+  padding: 4px;
+  text-align: center;
+}
+
+/* .ant-modal-confirm-content {
+  margin-left: 0 !important;
+} */
+
+.ant-btn-primary {
+  font-weight: bold !important;
+}
+
+.ant-divider-horizontal.ant-divider-with-text::before,
+.ant-divider-horizontal.ant-divider-with-text::after {
+  top: 0 !important;
+}
+
+/* .ant-input-lg {
+  padding: 5.5px 11px !important;
+} */
+.ant-input:hover {
+  border-left-width: 1px !important;
+}
+
+.ant-form-item-with-help {
+  margin-bottom: 24px;
+}
+
+.ant-menu-overflow {
+  display: block !important;
+}
+
+.ant-image {
+  vertical-align: middle !important;
+}
+
+.ant-image-mask {
+  color: transparent !important;
+}
+
+.ant-descriptions-bordered .ant-descriptions-item-label {
+  font-weight: bold !important;
+}
+
+.custom-required-decoration-star {
+  color: #ff4d4f;
+  margin-right: 5px;
+  font-family: SimSun, sans-serif;
+}
+
+.custom-required-decoration {
+  display: inline-block;
+  margin-left: 5px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  content: "必須";
+  background-color: #ff4d4f;
+  padding: 4px;
+  text-align: center;
+}
+
+.hide-timepicker-footer .ant-picker-footer {
+  display: none;
+}
+
+.datepicker-modal {
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+
+.custom-underline {
+  text-decoration: underline;
+  text-decoration-style: double;
+  text-decoration-color: #2563eb;
+}
+
+ol li::marker {
+  content: "※";
+}
+
+::marker {
+  font-weight: bold;
+}
+
+.masked-overflow {
+  /* scroll bar width, for use in mask calculations */
+  --scrollbar-width: 8px;
+
+  /* mask fade distance, for use in mask calculations */
+  --mask-height: 32px;
+
+  /* If content exceeds height of container, overflow! */
+  overflow-y: auto;
+
+  /* Our height limit */
+  height: 400px;
+
+  /* Need to make sure container has bottom space,
+  otherwise content at the bottom is always faded out */
+  padding-bottom: var(--mask-height);
+
+  /* Keep some space between content and scrollbar */
+  padding-right: 20px;
+
+  /* The CSS mask */
+
+  /* The content mask is a linear gradient from top to bottom */
+  --mask-image-content: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--mask-height),
+    black calc(100% - var(--mask-height)),
+    transparent
+  );
+
+  /* Here we scale the content gradient to the width of the container 
+  minus the scrollbar width. The height is the full container height */
+  --mask-size-content: calc(100% - var(--scrollbar-width)) 100%;
+
+  /* The scrollbar mask is a black pixel */
+  --mask-image-scrollbar: linear-gradient(black, black);
+
+  /* The width of our black pixel is the width of the scrollbar.
+  The height is the full container height */
+  --mask-size-scrollbar: var(--scrollbar-width) 100%;
+
+  /* Apply the mask image and mask size variables */
+  mask-image: var(--mask-image-content), var(--mask-image-scrollbar);
+  mask-size: var(--mask-size-content), var(--mask-size-scrollbar);
+
+  /* Position the content gradient in the top left, and the 
+  scroll gradient in the top right */
+  mask-position: 0 0, 100% 0;
+
+  /* We don't repeat our mask images */
+  mask-repeat: no-repeat, no-repeat;
+}
+/*! purgecss end ignore */

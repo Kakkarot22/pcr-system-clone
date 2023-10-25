@@ -1,0 +1,9 @@
+/node_modules
+/logs
+.log
+/.env
+.htaccess
+*.code-workspace
+.vscode/*
+/public
+

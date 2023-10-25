@@ -1,0 +1,158 @@
+require("dotenv").config();
+import * as path from "path";
+import * as fs from "fs";
+import * as bcrypt from "bcryptjs";
+import { db } from "../backend/models";
+// import { sequelize } from "../backend/models";
+import { log, warn } from "console";
+import moment = require("moment");
+const isDBAlter = process.argv.find(argc => argc == '-dbAlter');
+const isDBForce = process.argv.find(argc => argc == '-dbForce');
+const isDBSeed = process.argv.find(argc => argc == '-dbSeed');
+
+let dbInitConfig = {
+    alter: false,
+    force: false
+}
+if (isDBForce) {
+    dbInitConfig.force = true
+} else if (isDBAlter) {
+    dbInitConfig.alter = true
+}
+db.sequelize
+    .sync(dbInitConfig)
+    .then(async () => {
+        return seedDB(db)
+    }).then(() => {
+        log('db finished')
+        process.exit(0);
+    }).catch((e) => {
+        console.warn(e);
+        fs.appendFile('../logs/log_rest.log', `db init error ${e.toString()}, ${JSON.stringify(e)}. ${(new Date()).toISOString()} \n`, console.warn)
+        process.exit(1)
+    })
+export async function seedDB(db: any) {
+    if (isDBSeed) {
+        //manager
+        if (await db.models.managers.findOne() == null) {
+            await db.models.managers.create({
+                username: 'pcr_admin',
+                pwhash: await bcrypt.hash('8368z8h8ad', 10),
+                recoveryMail: 'support@line-sys.com',
+                isActivated: true
+            })
+        }
+        //customers
+        await db.models.customers.create({
+            firstName: '名前',
+            lastName: '苗字',
+            firstNameKana: 'なまえ',
+            lastNameKana: 'みょうじ',
+            email: 'test@line-sys.com',
+            telephone: '01234567890',
+            zipPostal: '4600003',
+            prefecture: '愛知県',
+            city: '名古屋市',
+            address: '錦2-12-34',
+            pwhash: await bcrypt.hash('test', 10)
+        })
+        //occasion PCR
+        let occasionPCR = await db.models.occasions.create({
+            type: 'pcr',
+            title: 'PCR TEST',
+            telephone: '12365478900',
+            address: '名古屋駅',
+            zipPostal: '4600003',
+            timeCancel: 1,
+            textCancel: 'text Cancel test',
+            canCancel: false,
+            cancelMessage: `[NAME]様\n[DATE]にご予約キャンセルされました。\nご利用ありがとうございます。改めてご予約の場合は下記のリンクをを押してください。\n　https://${process.env.SITE_URI}`,
+            regMessage: `[NAME]様\nご利用ありがとうございます。\nご予約完了になりました。\n検査の当日[DATE]QRコードをスタッフに見せてください。\n　https://${process.env.SITE_URI}`,
+            remindMessage: `[NAME]様\nPCR検査のリマインダーです。\nご予約は[DATE]です。\n　https://${process.env.SITE_URI}`,
+            remindMessage1: `[NAME]様\n予約システムご利用、誠にありがとうございます。\nPCR検査のリマインダーです。\nももなく[DATE]に検査が行いますQRコードをスタッフに見せてください。\n　https://${process.env.SITE_URI}`,
+            limitTime: true,
+            limitDays: 1,
+            limitHours: 18,
+            limitMinutes: 0
+        })
+        let fakeOccurrences: any = []
+        let startDateTime = moment('2022-02-28 09:00:00')
+        for (let i = 0; i < 20; i++) {
+            startDateTime.hour(9).minute(0)
+            for (let j = 0; j < 8; j++) {
+                fakeOccurrences.push({
+                    //@ts-ignore
+                    occasionId: occasionPCR.occasionId,
+                    maxAttendee: Math.floor(Math.random() * (30 - 20) + 20),
+                    startAt: moment(startDateTime).format('YYYY-MM-DD HH:mm:ss'),
+                    endAt: moment(startDateTime).add(59, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+                    startTime: startDateTime.format('HH:mm:ss')
+                })
+                startDateTime.add(1, 'hour')
+            }
+            startDateTime.add(1, 'day')
+        }
+        await db.models.occurrences.bulkCreate(fakeOccurrences, {
+            fields: ['occasionId', 'maxAttendee', 'startAt', 'endAt', 'startTime']
+        })
+        //occasion PCR
+        let occasionAntigen = await db.models.occasions.create({
+            type: 'antigen',
+            title: 'ANTIGEN TEST',
+            telephone: '12365478900',
+            address: '名古屋駅',
+            zipPostal: '4600003',
+            timeCancel: 1,
+            textCancel: 'text Cancel test',
+            canCancel: false,
+            cancelMessage: `[NAME]様\n[DATE]にご予約キャンセルされました。\nご利用ありがとうございます。改めてご予約の場合は下記のリンクをを押してください。\n　https://${process.env.SITE_URI}`,
+            regMessage: `[NAME]様\nご利用ありがとうございます。\n予約完了になりました。\n検査の当日[DATE]QRコードをスタッフに見せてください。\n　https://${process.env.SITE_URI}`,
+            remindMessage: `[NAME]様\nPCR検査のリマインダーです。\nご予約は[DATE]です。\n　https://${process.env.SITE_URI}`,
+            remindMessage1: `[NAME]様\n予約システムご利用、誠にありがとうございます。\nPCR検査のリマインダーです。\nももなく[DATE]に検査が行いますQRコードをスタッフに見せてください。\n　https://${process.env.SITE_URI}`,
+            limitTime: true,
+            limitDays: 1,
+            limitHours: 18,
+            limitMinutes: 0
+        })
+        let fakeOccurrences1: any = []
+        let startDateTime1 = moment('2022-02-28 09:00:00')
+        for (let i = 0; i < 20; i++) {
+            startDateTime1.hour(9).minute(0)
+            for (let j = 0; j < 8; j++) {
+                fakeOccurrences1.push({
+                    //@ts-ignore
+                    occasionId: occasionAntigen.occasionId,
+                    maxAttendee: Math.floor(Math.random() * (30 - 20) + 20),
+                    startAt: moment(startDateTime1).format('YYYY-MM-DD HH:mm:ss'),
+                    endAt: moment(startDateTime1).add(59, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+                    startTime: startDateTime1.format('HH:mm:ss')
+                })
+                startDateTime1.add(1, 'hour')
+            }
+            startDateTime1.add(1, 'day')
+        }
+        await db.models.occurrences.bulkCreate(fakeOccurrences1, {
+            fields: ['occasionId', 'maxAttendee', 'startAt', 'endAt', 'startTime']
+        })
+    }
+}
+process.on('uncaughtException', function (err) {
+    if (err) {
+        if (process.env.ENV_TEST) {
+            console.warn(err);
+        } else {
+            fs.appendFile('../logs/log_rest.log', `uncaught exception. stack: ${err.stack} ${(new Date()).toISOString()} \n`, console.warn)
+        }
+        process.exit(1);
+    }
+});
+process.on('exit', code => {
+    if (code) {
+        if (process.env.ENV_TEST) {
+            console.warn(code);
+        } else {
+            fs.appendFile('../logs/log_rest.log', `uncaught exception. stack: ${code} ${(new Date()).toISOString()} \n`, console.warn)
+        }
+        process.exit(1);
+    }
+})
