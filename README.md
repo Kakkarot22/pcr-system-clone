@@ -13,3 +13,4 @@ Make sure you have SITE_URI as localhost:3000
 ```
 $ npm run start
 ```
+Please fork the repo for your practice & study
