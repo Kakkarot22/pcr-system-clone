@@ -19,6 +19,7 @@ const iooptions = {
       : `https://${process.env.SITE_URI}`,
   },
 };
+console.log(iooptions);
 exports.io = require("socket.io")(server, iooptions);
 exports.io.on("connection", (s) => {});
 const models_1 = require("./backend/models");

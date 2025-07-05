@@ -10,6 +10,10 @@ import { loginBruteforce, tokenBruteforce } from "../utility/apiLimiter";
 
 const router = Router()
 
+
+
+
+
 router.use('/u', checkCustomer, CustomerRouter)
 router.post('/signup', EntryController.CustomerSignup)
 router.post('/reset', EntryController.CustomerResetPassword)
