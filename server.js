@@ -14,9 +14,7 @@ const iooptions = {
   serveClient: process.env.ENV_TEST ? true : false,
   path: "/socket.io",
   cors: {
-    origin: process.env.ENV_TEST
-      ? "http://localhost:3000"
-      : `https://${process.env.SITE_URI}`,
+    origin: process.env.SITE_URI,
   },
 };
 console.log(iooptions);
