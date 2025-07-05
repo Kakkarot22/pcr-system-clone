@@ -1,7 +1,11 @@
 import React from "react"
 import { Switch, Redirect } from "react-router-dom"
 import { RouteWithLayout } from "./components"
-import { Minimal as MinimalLayout, AdminMain as AdminMainLayout, ClientMain as ClientMainLayout } from "./layouts"
+import {
+  Minimal as MinimalLayout,
+  AdminMain as AdminMainLayout,
+  ClientMain as ClientMainLayout,
+} from "./layouts"
 import * as Commons from "common/common"
 
 import {

@@ -15,7 +15,8 @@ router.post('/signup', EntryController.CustomerSignup)
 router.post('/reset', EntryController.CustomerResetPassword)
 router.post('/token', EntryController.ConsumeToken)
 router.post('/email',
-    tokenBruteforce.getMiddleware({ key: function (req, res, next) { next(req.body.username) } }),
+    // tokenBruteforce.getMiddleware({ key: function (req, res, next) { next(req.body.username) } }),
+    tokenBruteforce.getMiddleware({ key: function (req, res, next) { next(req.body.email) } }),
     (req, res, next) => { res.locals.tokenType = 'new'; next() },
     EntryController.RequestToken)
 router.post('/forgot',
@@ -37,6 +38,7 @@ router.get('/auth', (req, res) => {
     else { res.sendStatus(SESSION_ERROR) }
 })
 router.get('/sess', (req, res) => {
+    console.log("hihi session "+ req.session.user)
     if (req.session.user?.managerId) { res.send({ managerId: req.session.user.managerId, role: 'manager' }) }
     else if (req.session.user?.customerId) { res.send({ customerId: req.session.user.customerId, role: 'customer' }) }
     else { res.sendStatus(SESSION_ERROR) }

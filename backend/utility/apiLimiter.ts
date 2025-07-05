@@ -30,6 +30,7 @@ var handleStoreError = function (error: Error) {
     };
 }
 const tokenBruteOptions = {
+    console.log("hihihi from token")
     freeRetries: 4,
     minWait: 10 * 1000,//25 * 60 * 60 * 1000, // 1 day 1 hour (should never reach this wait time)
     maxWait: 60 * 60 * 1000,// 1 day 1 hour (should never reach this wait time)

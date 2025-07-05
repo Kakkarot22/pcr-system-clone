@@ -38,6 +38,7 @@ export class EntryController {
     }
     //RegisterEmail & Forgot password
     static async RequestToken(req: Request, res: Response) {
+        console.log("HIHIH from request")
         try {
             let email = req.body.email
             let tokenType = res.locals.tokenType
@@ -84,6 +85,7 @@ export class EntryController {
                 }
             }
         } catch (e) {
+            console.log("EMAIL ERROR", e);
             errLog(`RequestToken ${JSON.stringify(e)}`, 'db')
             res.sendStatus(SYSTEM_ERROR)
         }

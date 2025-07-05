@@ -127,7 +127,7 @@ export const warnTooManyRequest =
   "短時間に送信されるリクエストが多すぎます。 しばらく待ってから、もう一度送信してください"
 export const warnTooManyLoginRequest =
   "短時間にログインリクエストが多すぎます。 しばらく待ってから、もう一度ログインしてください"
-export const warnSameDayReserveMsg = '同日にPCRと抗原検査の両方予約ができません'
+export const warnSameDayReserveMsg = "同日にPCRと抗原検査の両方予約ができません"
 export const successLoginMsg = "ログインしました。"
 export const successLogoutMsg = "ログアウトしました。"
 export const successMakeMsg = "作成成功"
