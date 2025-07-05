@@ -54,12 +54,13 @@ const corsOptions = {
   ],
   credentials: true,
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-  origin: process.env.ENV_TEST
-    ? "http://localhost:3000"
-    : [
-        `https://${process.env.SITE_URI}`,
-        "https://status-check.testweb-demo.com",
-      ],
+  origin: "https://pcr-system-clone.vercel.app",
+  // process.env.ENV_TEST
+  //   ? "http://localhost:3000"
+  //   : [
+  //       `https://${process.env.SITE_URI}`,
+  //       "https://status-check.testweb-demo.com",
+  //     ]
   preflightContinue: false,
 };
 app.use(cors(corsOptions));
