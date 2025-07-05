@@ -14,7 +14,7 @@ const iooptions = {
   serveClient: process.env.ENV_TEST ? true : false,
   path: "/socket.io",
   cors: {
-    origin: process.env.SITE_URI,
+    origin: "https://pcr-system-clone.vercel.app/",
   },
 };
 console.log(iooptions);
