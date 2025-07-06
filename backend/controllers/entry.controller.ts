@@ -239,7 +239,7 @@ export class EntryController {
                     managerId: manager.managerId,
                     expires: SESSION_EXPIRE_TIME
                 }
-                res.cookie(process.env.SESS_NAME as string, { maxAge: (SESSION_EXPIRE_TIME), sameSite: 'lax' })
+                res.cookie(process.env.SESS_NAME as string, { maxAge: (SESSION_EXPIRE_TIME), sameSite: 'none' })
                 req.brute!.reset!(function () {
                     res.status(RESPONSE_SUCCESS).send({ managerId: manager!.managerId, role: 'manager' })
                 })

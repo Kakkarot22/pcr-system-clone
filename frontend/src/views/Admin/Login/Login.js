@@ -37,7 +37,9 @@ const Login = (props) => {
     }
 
     Commons.axiosInstance
-      .post(Commons.apiAuth, postData)
+      .post(Commons.apiAuth, postData, {
+        withCredentials: true,
+      })
       .then((response) => {
         message.success(Commons.successLoginMsg)
         history.push(Commons.GET_REDIRECT_HOME_ROUTE(response?.data?.role))
