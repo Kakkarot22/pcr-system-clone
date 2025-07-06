@@ -19,7 +19,10 @@ const server = https.createServer(app);
 
 // 🌟 CORS config for Vercel + local dev
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://pcr-system-clone.vercel.app"],
+  origin: [
+    "https://pcr-system-clone.vercel.app", // your Vercel frontend
+    "http://localhost:3000", // for local dev
+  ],
   credentials: true,
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
   allowedHeaders: [
