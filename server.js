@@ -19,10 +19,7 @@ const server = https.createServer(app);
 
 // 🌟 CORS config for Vercel + local dev
 const corsOptions = {
-  origin: [
-    "https://pcr-system-clone.vercel.app", // your Vercel frontend
-    "http://localhost:3000", // for local dev
-  ],
+  origin: "https://pcr-system-clone.vercel.app",
   credentials: true,
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
   allowedHeaders: [
@@ -41,6 +38,11 @@ app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.options("*", cors(corsOptions));
+
+app.use((req, res, next) => {
+  console.log("🛰 Incoming Origin:", req.headers.origin);
+  next();
+});
 
 // 🌟 Session with cross-origin cookie support
 app.use(
