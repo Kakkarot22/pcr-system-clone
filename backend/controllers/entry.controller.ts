@@ -158,7 +158,7 @@ export class EntryController {
                     await oldToken.destroy({ transaction: transaction })
                     //LOGIN
                     req.session.user = { customerId: customer.customerId, displayName: `${customer.lastName} ${customer.firstName}`, expires: SESSION_EXPIRE_TIME }
-                    res.cookie(process.env.SESS_NAME as string, { maxAge: (SESSION_EXPIRE_TIME), sameSite: 'lax' })
+                    res.cookie(process.env.SESS_NAME as string, { maxAge: (SESSION_EXPIRE_TIME), sameSite: 'none' })
                     await transaction.commit()
                     return res.sendStatus(RESPONSE_SUCCESS)
                 }
@@ -185,7 +185,7 @@ export class EntryController {
             let isMatch = await Utility.comparePassword(req.body.password, customer.pwhash!)
             if (isMatch) {
                 req.session.user = { customerId: customer.customerId, displayName: `${customer.lastName} ${customer.firstName}`, expires: SESSION_EXPIRE_TIME }
-                res.cookie(process.env.SESS_NAME as string, { maxAge: (SESSION_EXPIRE_TIME), sameSite: 'lax' })
+                res.cookie(process.env.SESS_NAME as string, { maxAge: (SESSION_EXPIRE_TIME), sameSite: 'none' })
                 req.brute!.reset!(function () {
                     res.status(RESPONSE_SUCCESS).send({ customerId: customer!.customerId, role: 'customer' })
                 })

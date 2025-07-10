@@ -274,7 +274,8 @@ class EntryController {
           };
           res.cookie(process.env.SESS_NAME, {
             maxAge: constants_1.SESSION_EXPIRE_TIME,
-            sameSite: "lax",
+            sameSite: "none",
+            secure: true,
           });
           await transaction.commit();
           return res.sendStatus(constants_1.RESPONSE_SUCCESS);
@@ -322,6 +323,7 @@ class EntryController {
         res.cookie(process.env.SESS_NAME, {
           maxAge: constants_1.SESSION_EXPIRE_TIME,
           sameSite: "none",
+          secure: true,
         });
         req.brute.reset(function () {
           res
@@ -377,9 +379,22 @@ class EntryController {
           managerId: manager.managerId,
           expires: constants_1.SESSION_EXPIRE_TIME,
         };
-        res.cookie(process.env.SESS_NAME, {
-          maxAge: constants_1.SESSION_EXPIRE_TIME,
-          sameSite: "lax",
+        // res.cookie(process.env.SESS_NAME, {
+        //   maxAge: constants_1.SESSION_EXPIRE_TIME,
+        //   sameSite: "none",
+        //   secure: true,
+        // });
+        req.session.save((err) => {
+          if (err) {
+            console.error("Session save error:", err);
+            return res.sendStatus(constants_1.SYSTEM_ERROR);
+          }
+
+          req.brute.reset(function () {
+            res
+              .status(constants_1.RESPONSE_SUCCESS)
+              .send({ managerId: manager.managerId, role: "manager" });
+          });
         });
         req.brute.reset(function () {
           res

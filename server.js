@@ -40,6 +40,7 @@ app.use(cors(corsOptions));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+//app.set("trust proxy", 1);
 
 // 🌟 Session with cross-origin cookie support
 app.use(
