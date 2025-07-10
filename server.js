@@ -17,9 +17,12 @@ const { writeLog, CustomTaskScheduler } = require("./backend/utility/index");
 const app = express();
 const server = https.createServer(app);
 
-// 🌟 CORS config for Vercel + local dev
+// ✅ Required for trusting Render/Vercel proxies (needed for cookie/session to work properly)
+app.set("trust proxy", 1);
+
+// ✅ CORS configuration
 const corsOptions = {
-  origin: "https://pcr-system-clone.vercel.app",
+  origin: ["https://pcr-system-clone.vercel.app", "http://localhost:3000"],
   credentials: true,
   methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
   allowedHeaders: [
@@ -32,19 +35,21 @@ const corsOptions = {
   ],
   preflightContinue: false,
 };
-app.set("trust proxy", 1);
-app.use(cors(corsOptions));
-app.use(helmet({ contentSecurityPolicy: false }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.options("*", cors(corsOptions));
 
+app.use(cors(corsOptions));
+
+// ✅ Optional but useful fallback in some Render cases
 app.use((req, res, next) => {
-  console.log("🛰 Incoming Origin:", req.headers.origin);
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 
-// 🌟 Session with cross-origin cookie support
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ Session setup
 app.use(
   session({
     secret: process.env.SESS_SEC,
@@ -56,14 +61,14 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      sameSite: "none",
-      secure: true,
-      maxAge: 86400000 * 7,
+      sameSite: "none", // Required for cross-origin cookies (Vercel + Render)
+      secure: true, // Required for HTTPS (Render)
+      maxAge: 86400000 * 7, // 7 days
     },
   })
 );
 
-// 🌟 Serve frontend + static
+// ✅ Static and API routes
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 app.use("/api", router);
 app.use(express.static(path.join(__dirname, "public")));
@@ -77,7 +82,7 @@ app.get("/*", (req, res) => {
   );
 });
 
-// 🌟 Socket.io
+// ✅ Socket.io
 const ioOptions = {
   serveClient: false,
   path: "/socket.io",
@@ -90,7 +95,7 @@ io.on("connection", (socket) => {
 });
 exports.io = io;
 
-// 🌟 Error handlers
+// ✅ Error handlers
 process.on("unhandledRejection", (err) => {
   writeLog(JSON.stringify({ msg: "unhandled rejection", err }), "crit");
   process.exit(1);
@@ -106,14 +111,14 @@ process.on("exit", (code) => {
   }
 });
 
-// 🌟 Start server
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.set("port", PORT);
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
-// 🌟 DB + scheduled task
+// ✅ Sync DB and run any tasks
 const isProduction = process.env.NODE_ENV === "production";
 db.sequelize
   .sync({ alter: !isProduction })
