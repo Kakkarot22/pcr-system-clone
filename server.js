@@ -35,12 +35,12 @@ const corsOptions = {
   ],
   preflightContinue: false,
 };
-
+app.set("trust proxy", 1);
 app.use(cors(corsOptions));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.set("trust proxy", 1);
+app.options("*", cors(corsOptions));
 
 // 🌟 Session with cross-origin cookie support
 app.use(
