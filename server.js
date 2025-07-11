@@ -83,13 +83,15 @@ app.get("/*", (req, res) => {
 });
 
 // ✅ Socket.io
-const ioOptions = {
+const io = require("socket.io")(server, {
   serveClient: false,
   path: "/socket.io",
-  cors: corsOptions,
-};
-
-const io = require("socket.io")(server, ioOptions);
+  cors: {
+    origin: ["https://pcr-system-clone.vercel.app", "http://localhost:3000"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 io.on("connection", (socket) => {
   console.log("Socket connected: " + socket.id);
 });
